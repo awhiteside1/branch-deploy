@@ -603,6 +603,7 @@ export async function run() {
       owner: owner,
       repo: repo,
       ref: precheckResults.ref,
+      auto_inactive: true,
       auto_merge: auto_merge,
       required_contexts: requiredContexts,
       environment: environment,

@@ -22,6 +22,7 @@ export async function createDeploymentStatus(
   const {data: result} = await octokit.rest.repos.createDeploymentStatus({
     owner: owner,
     repo: repo,
+    auto_inactive: true,
     ref: ref,
     deployment_id: deploymentId,
     state: state,
