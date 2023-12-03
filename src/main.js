@@ -456,6 +456,8 @@ export async function run() {
       }
     }
 
+    core.saveState('app', body.split(param_separator)[1]?.trim())
+
     // Execute prechecks to ensure the Action can proceed
     const precheckResults = await prechecks(context, octokit, data)
     core.setOutput('ref', precheckResults.ref)
@@ -609,6 +611,7 @@ export async function run() {
       production_environment: isProductionEnvironment,
       // :production_environment note: specifies if the given environment is one that end-users directly interact with. Default: true when environment is production and false otherwise.
       payload: {
+        app: body.split(param_separator)[1]?.trim(),
         type: 'branch-deploy'
       }
     })
@@ -640,7 +643,7 @@ export async function run() {
       octokit,
       context,
       precheckResults.ref,
-      'in_progress',
+      'queued',
       createDeploy.id,
       environment,
       environmentObj.environmentUrl // environment_url (can be null)

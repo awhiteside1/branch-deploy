@@ -164,6 +164,31 @@ test('successfully runs the action on a deployment to development', async () => 
   expect(debugMock).toHaveBeenCalledWith('production_environment: false')
 })
 
+test('successfully runs the action on a deployment to development with params', async () => {
+  github.context.payload.comment.body = '.deploy to development | apps/lending'
+
+  expect(await run()).toBe('success')
+  expect(setOutputMock).toHaveBeenCalledWith('deployment_id', 123)
+  expect(setOutputMock).toHaveBeenCalledWith(
+    'comment_body',
+    '.deploy to development | apps/lending'
+  )
+  expect(setOutputMock).toHaveBeenCalledWith('triggered', 'true')
+  expect(setOutputMock).toHaveBeenCalledWith('comment_id', 123)
+  expect(setOutputMock).toHaveBeenCalledWith('ref', 'test-ref')
+  expect(setOutputMock).toHaveBeenCalledWith('noop', false)
+  expect(setOutputMock).toHaveBeenCalledWith('continue', 'true')
+  expect(saveStateMock).toHaveBeenCalledWith('isPost', 'true')
+  expect(saveStateMock).toHaveBeenCalledWith('actionsToken', 'faketoken')
+  expect(saveStateMock).toHaveBeenCalledWith('environment', 'development')
+  expect(saveStateMock).toHaveBeenCalledWith('comment_id', 123)
+  expect(saveStateMock).toHaveBeenCalledWith('ref', 'test-ref')
+  expect(saveStateMock).toHaveBeenCalledWith('noop', false)
+  expect(setOutputMock).toHaveBeenCalledWith('type', 'deploy')
+  expect(saveStateMock).toHaveBeenCalledWith('deployment_id', 123)
+  expect(debugMock).toHaveBeenCalledWith('production_environment: false')
+})
+
 test('successfully runs the action in noop mode', async () => {
   jest.spyOn(prechecks, 'prechecks').mockImplementation(() => {
     return {
